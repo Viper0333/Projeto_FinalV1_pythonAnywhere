@@ -19,7 +19,7 @@ export function Signup() {
         }
 
         try {
-            const response = await fetch('https://diegocavalcantidev.pythonanywhere.com/api/users/', {
+            const response = await fetch('https://alexalexandre.pythonanywhere.com/api/users/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
