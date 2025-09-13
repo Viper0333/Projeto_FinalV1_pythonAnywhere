@@ -1,13 +1,13 @@
 # Twitter Clone
 
 ## Autor
-Diego Cavalcanti
+Alex Alexandre
 
 ## Versão
 1.0
 
 ## Data
-2025-01-03
+13-09-2025
 
 ---
 
@@ -102,7 +102,7 @@ Durante o desenvolvimento, utilizei containers Docker para configurar um ambient
     npm install
 
 3. **Configurar Variáveis de Ambiente: Altere o arquivo src/api/base_api.js**:
-    export const API_BASE_URL = 'http://localhost:8000';
+    export const API_BASE_URL = 'http://localhost:8000'; ou porta 8084
 
 4. **Rodar o Servidor de Desenvolvimento**:
     npm run dev
@@ -114,13 +114,13 @@ Durante o desenvolvimento, utilizei containers Docker para configurar um ambient
 - **Webhook configurado** para atualizações automáticas.
 
 ## Frontend
-- Hospedado na **Vercel**.
+- Hospedado no **PythonAnywhere**.
 
 ## Tecnologias Utilizadas
 
 ### Backend
 - Django Rest Framework
-- PostgreSQL
+- db.sqlite3
 - Poetry
 - Docker
 

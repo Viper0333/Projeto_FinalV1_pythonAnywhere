@@ -20,8 +20,9 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-default-key")
 
 DEBUG = int(os.environ.get("DEBUG", 1))
 
-# ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost 127.0.0.1").split()
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'ebac-bookstore-api.herokuapp.com', 'AlexAlexandre.pythonanywhere.com']
+
+# ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 
 INSTALLED_APPS = [
@@ -57,10 +58,12 @@ MIDDLEWARE.insert(0, "corsheaders.middleware.CorsMiddleware")
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://twitter-sigma.vercel.app",
+    "AlexAlexandre.pythonanywhere.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://twitter-sigma.vercel.app",
+    "AlexAlexandre.pythonanywhere.com",
 ]
 
 ROOT_URLCONF = "twitter_clone.urls"
@@ -153,7 +156,7 @@ SIMPLE_JWT = {
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
 # For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'diegocavalcantidev.pythonanywhere.com', 'twitter-sigma.vercel.app']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'AlexAlexandre.pythonanywhere.com', 'twitter-sigma.vercel.app']
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
