@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 interface AuthState {
     isAuthenticated: boolean;
@@ -10,55 +10,66 @@ interface AuthState {
 }
 
 export const useAuth = create<AuthState>((set) => ({
-    isAuthenticated: !!localStorage.getItem('authToken'),
-    token: localStorage.getItem('authToken'),
-    
+    isAuthenticated: false,
+    token: localStorage.getItem("authToken"),
+
     login: async (email, password) => {
         try {
-        const resp = await fetch('https://alexalexandre.pythonanywhere.com/api/token/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password }),
-        });
+            const resp = await fetch("http://127.0.0.1:8000/api/token/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
 
-        if (!resp.ok) throw new Error('Falha no login');
+            if (!resp.ok) throw new Error("Falha no login");
 
-        const data = await resp.json();
-        localStorage.setItem('authToken', data.access);
-        set({ isAuthenticated: true, token: data.access });
+            const data = await resp.json();
+            localStorage.setItem("authToken", data.access);
+            set({ isAuthenticated: true, token: data.access });
         } catch (error) {
-        console.error('Erro ao fazer login:', error);
-        set({ isAuthenticated: false, token: null });
+            console.error("Erro ao fazer login:", error);
+            set({ isAuthenticated: false, token: null });
         }
     },
 
     signup: async (name, email, password) => {
         try {
-        const resp = await fetch('https://alexalexandre.pythonanywhere.com/api/users/signup/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, password, bio: "", avatar: null }),
-        });
+            const resp = await fetch("http://127.0.0.1:8000/api/users/signup/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username: email,
+                    email,
+                    password,
+                    password_confirmation: password, // 👈 Adicionado
+                    bio: "",
+                    avatar: null,
+                }),
+            });
 
-        if (!resp.ok) throw new Error('Falha no cadastro');
+            if (!resp.ok) throw new Error("Falha no cadastro");
 
-        await useAuth.getState().login(email, password); // login automático após signup
+            await resp.json();
+            await useAuth.getState().login(email, password);
         } catch (error) {
-        console.error('Erro ao fazer cadastro:', error);
+            console.error("Erro ao fazer cadastro:", error);
         }
     },
 
     logout: () => {
-        localStorage.removeItem('authToken');
+        localStorage.removeItem("authToken");
         set({ isAuthenticated: false, token: null });
-        window.location.href = '/login'; // redireciona para login
+        window.location.href = "/login";
     },
 
     restoreSession: () => {
-        const token = localStorage.getItem('authToken');
-        set({ isAuthenticated: !!token, token });
+        const token = localStorage.getItem("authToken");
+        if (token) set({ isAuthenticated: true, token });
+        else set({ isAuthenticated: false, token: null });
     },
 }));
+
+
 
 
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Image, Smile, Calendar, MapPin } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
@@ -17,7 +17,7 @@ export function TweetBox() {
 
         try {
             console.log("Enviando tweet:", tweet);
-            const response = await fetch('https://alexalexandre.pythonanywhere.com/api/tweets/', {
+            const response = await fetch('http://127.0.0.1:8000/api/tweets/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -39,7 +39,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
             bio=validated_data.get('bio', ''),
             avatar=validated_data.get('avatar', None)
         )
-        return user
 
 
 class UserSerializer(serializers.ModelSerializer):

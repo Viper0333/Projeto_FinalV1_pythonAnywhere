@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import { Layout } from '../components/Layout';
 import { TweetBox } from '../components/TweetBox';
 import { TweetList } from '../components/tweet/TweetList';
