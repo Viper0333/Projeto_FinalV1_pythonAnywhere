@@ -1,7 +1,7 @@
 # Twitter Clone
 
 ## Autor
-Diego Cavalcanti
+Alex Alexandre
 
 ## Versão
 1.0
@@ -66,7 +66,7 @@ Durante o desenvolvimento, utilizei containers Docker para configurar um ambient
 
 1. **Clonar o Repositório**:
    ```bash
-   git clone https://github.com/diegocavalcanti-dev/twitter.git
+   git clone https://github.com/Viper0333/Projeto_FinalV1_pythonAnywhere
    cd twitter/backend
 
 2. **Configurar o Ambiente Virtual**:
