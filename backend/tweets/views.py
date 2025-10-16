@@ -1,18 +1,17 @@
-# tweets/views.y
+
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from django.http import JsonResponse
 from .models import Tweet
-from .serializers import TweetSerializer
+from .serializers import TweetSerializer, CommentSerializer, UserUpdateSerializer
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from .serializers import CommentSerializer
 
 class TweetViewSet(viewsets.ModelViewSet):
     queryset = Tweet.objects.all().order_by('-created_at')
     serializer_class = TweetSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Requer login
+    permission_classes = [permissions.IsAuthenticated]  # padrão para todo o ViewSet
 
     def perform_create(self, serializer):
         """Associa o tweet ao usuário autenticado."""
@@ -26,7 +25,7 @@ class TweetViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-    @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def like_tweet(self, request, pk=None):
         """Toggle like/unlike de um tweet."""
         tweet = self.get_object()
@@ -44,11 +43,9 @@ class TweetViewSet(viewsets.ModelViewSet):
             "total_likes": tweet.likes.count()
         })
     
-    @action(detail=True, methods=['POST'], permission_classes=[permissions.IsAuthenticated])
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def add_comment(self, request, pk=None):
-        """
-        POST /tweets/{id}/add_comment/
-        """
+        """POST /tweets/{id}/add_comment/"""
         tweet = self.get_object()
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
@@ -56,12 +53,12 @@ class TweetViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['GET'], permission_classes=[permissions.AllowAny])
+    @action(detail=True, methods=['get'], permission_classes=[AllowAny])
     def comments(self, request, pk=None):
-        """
-        GET /tweets/{id}/comments/
-        """
+        """GET /tweets/{id}/comments/"""
         tweet = self.get_object()
         comments = tweet.comments.all().order_by('-created_at')
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
+
+
