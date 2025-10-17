@@ -31,6 +31,7 @@ export const useAuth = create<AuthState>((set) => ({
         const data = await resp.json();
         localStorage.setItem('authToken', data.access);
         set({ isAuthenticated: true, token: data.access });
+        console.log("Token após login:", data.access); // 🔹 aqui
         } catch (error) {
         console.error('Erro ao fazer login:', error);
         set({ isAuthenticated: false, token: null });
@@ -70,11 +71,18 @@ export const useAuth = create<AuthState>((set) => ({
     },
 
     restoreSession: () => {
-        const token = localStorage.getItem('authToken');
-        if (token) {
+    const token = localStorage.getItem('authToken');
+        console.log("restoreSession token:", token); // 🔹 aqui
+    if (token) {
         set({ isAuthenticated: true, token });
-        } else {
+    } else {
         set({ isAuthenticated: false, token: null });
-        }
+    }
     },
+
+
+
+
+
+
 }));
