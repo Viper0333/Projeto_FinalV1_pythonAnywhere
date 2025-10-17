@@ -1,3 +1,4 @@
+# tweet/serializers.py
 from rest_framework import serializers
 from .models import Tweet
 from .models import Tweet, Comment
@@ -7,15 +8,26 @@ User = get_user_model()
 
 class TweetSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField()
-    timestamp = serializers.DateTimeField(source='created_at', read_only=True)  # <- aqui
+    author_id = serializers.IntegerField(source='author.id', read_only=True)  # <- ID do autor
+    timestamp = serializers.DateTimeField(source='created_at', read_only=True)
     is_following = serializers.SerializerMethodField()
+    total_likes = serializers.SerializerMethodField()  # opcional, se quiser exibir contador
 
     class Meta:
         model = Tweet
-        fields = ['id', 'content', 'username', 'userid', 'timestamp', 'likes', 'is_following',]
+        fields = ['id', 'content', 'username', 'author_id', 'timestamp', 'likes', 'is_following', 'total_likes']
 
     def get_username(self, obj):
         return obj.author.email.split("@")[0]
+
+    def get_is_following(self, obj):
+        request = self.context.get('request')
+        if request and hasattr(request, 'user') and request.user.is_authenticated:
+            return obj.author.followers.filter(id=request.user.id).exists()
+        return False
+
+    def get_total_likes(self, obj):
+        return obj.likes.count()
 
 
 class CommentSerializer(serializers.ModelSerializer):

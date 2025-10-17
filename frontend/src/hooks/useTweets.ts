@@ -1,19 +1,33 @@
+// hooks/useTweets.ts
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from './useAuth';
 
-interface Tweet {
-    id: string;
-    username: string;
+export interface CommentType {
+    id: number;
+    author_email: string;
     content: string;
-    timestamp: string;
-    likes: number;
-    retweets: number;
-    replies: number;
-    liked?: boolean;
+    created_at: string;
 }
 
+export interface TweetType {
+    id: number;
+    username: string;
+    user_id: number;           // <-- agora incluído
+    author_id: number
+    content: string;
+    timestamp: string;
+    likes_count: number;       // <-- corresponde ao JSON
+    replies_count: number;
+    comments: CommentType[];
+    is_following: boolean;
+    handle?: string;
+    liked_by_me: boolean;
+    retweets_count: number;
+}
+
+
 export function useTweets() {
-    const [tweets, setTweets] = useState<Tweet[]>([]);
+    const [tweets, setTweets] = useState<TweetType[]>([]);
     const [reloadKey, setReloadKey] = useState(0); // Força uma atualização
     const { token } = useAuth();
 
@@ -32,7 +46,7 @@ export function useTweets() {
             });
 
             if (!response.ok) throw new Error('Erro ao buscar tweets');
-            const data = await response.json();
+            const data: TweetType[] = await response.json();
             console.log("Tweets recebidos:", data);
             setTweets(data);
         } catch (error) {
@@ -40,7 +54,6 @@ export function useTweets() {
         }
     }, [token]);
 
-    // Use reloadKey para forçar re-renderização
     useEffect(() => {
         fetchTweets();
     }, [fetchTweets, reloadKey]);
